@@ -6,10 +6,24 @@ export const styles = StyleSheet.create({
         paddingHorizontal: scale(20),
     },
     title: {
-        paddingTop: scale(35),
-        paddingBottom: scale(15),
+        paddingVertical: scale(30),
         fontSize: scale(19),
-        fontWeight: '600',
+        fontWeight: '700',
+    },
+    input: {
+        flexDirection: 'row',
+        gap: scale(10),
+        alignItems: 'center',
+    },
+    textInput: {
+        backgroundColor: '#F3F4F6',
+        borderRadius: scale(8),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: scale(10),
+        paddingHorizontal: scale(10),
+        marginBottom: scale(15),
     },
     subtitle: {
         paddingVertical: scale(15),
@@ -19,7 +33,8 @@ export const styles = StyleSheet.create({
     },
     card: {
         flexDirection: 'row',
-        gap: 15,
+        gap: scale(15),
+        justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: scale(15),
         borderTopColor: '#c8c8c8',
@@ -32,6 +47,6 @@ export const styles = StyleSheet.create({
     },
     info: {
         flexDirection: 'column',
-        gap: 5,
+        gap: scale(5),
     },
 });
