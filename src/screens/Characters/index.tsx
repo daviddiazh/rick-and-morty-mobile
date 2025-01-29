@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CHARACTERS } from '../../graphql/queries';
 import { apolloClient } from '../../graphql/client';
 import { ScrollView } from 'react-native-gesture-handler';
+import { styles } from './styles';
 
 export const CharactersScreen = () => {
   const [characters, setCharacters] = useState<any>([]);
@@ -18,7 +19,7 @@ export const CharactersScreen = () => {
     const { data: { characters } } = await apolloClient.query({
         query: CHARACTERS,
     });
-
+    console.log({characters})
     setCharacters(characters);
   };
 
@@ -27,19 +28,23 @@ export const CharactersScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView>
-        <Text>Rick and Morty list</Text>
+    <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Rick and Morty list</Text>
         <ScrollView>
-            <Text>CHARACTERS: ({characters?.results?.length})</Text>
+            <Text style={styles.subtitle}>CHARACTERS: ({characters?.results?.length})</Text>
             {
                 characters?.results?.map((c) => (
-                    <View key={c?.id}>
+                    <View key={c?.id} style={styles.card}>
                         <Image
                             source={{ uri: c?.image}}
                             width={50}
                             height={50}
+                            style={styles.picture}
                         />
-                        <Text>{c?.name}</Text>
+                        <View style={styles.info}>
+                            <Text>{c?.name}</Text>
+                            <Text>{c?.species}</Text>
+                        </View>
                     </View>
                 ))
             }
