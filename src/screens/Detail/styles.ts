@@ -5,9 +5,10 @@ export const styles = StyleSheet.create({
     container: {
         paddingHorizontal: scale(20),
         paddingTop: scale(20),
+        flex: 1,
     },
     pictureContainer: {
-        position: 'relative', // Asegura que los hijos absolutos se posicionen dentro de este contenedor
+        position: 'relative',
         width: scale(100),
         height: scale(100),
         marginTop: scale(15),
@@ -32,17 +33,58 @@ export const styles = StyleSheet.create({
         paddingBottom: scale(10),
     },
     info: {
-        paddingVertical: scale(15),
+        paddingVertical: scale(10),
     },
     label: {
-        fontSize: scale(15),
+        fontSize: scale(14),
         fontWeight: '400',
         color: '#000',
     },
     value: {
-        fontSize: scale(14),
+        fontSize: scale(13),
         fontWeight: '300',
         color: '#000',
-        paddingTop: scale(3),
+        paddingTop: scale(2.5),
+    },
+    btn: {
+        backgroundColor: '#8054C7',
+        paddingVertical: scale(8),
+        borderRadius: scale(8),
+        width: '100%',
+        alignItems: 'center',
+        marginTop: scale(10),
+    },
+    textBtn: {
+        color: '#fff',
+        fontWeight: '500',
+        fontSize: scale(12),
+    },
+    subtitle: {
+        fontSize: scale(13),
+        fontWeight: '500',
+        color: '#7a7877',
+    },
+
+    // Bottom Sheet
+    title: {
+        color: '#6B7280',
+        fontWeight: '400',
+        fontSize: scale(13),
+        paddingTop: scale(15),
+    },
+    input: {
+        flexDirection: 'row',
+        gap: scale(10),
+        alignItems: 'center',
+    },
+    textInput: {
+        backgroundColor: '#F3F4F6',
+        borderRadius: scale(8),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: scale(10),
+        paddingHorizontal: scale(10),
+        marginVertical: scale(15),
     },
 });

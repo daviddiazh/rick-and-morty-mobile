@@ -11,10 +11,18 @@ export const useForm = <T extends Object>( initState: T ) => {
         });
     };
 
+    const onReset = ( field: keyof T ) => {
+        setState({
+            ...state,
+            [field]: '',
+        });
+    };
+
     return {
         ...state,
         form: state,
         onChange,
+        onReset,
     };
 
 };

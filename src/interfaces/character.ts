@@ -6,4 +6,5 @@ export interface Character {
     status: string;
     occupation: string;
     favorite?: boolean;
+    comments: string[];
 }

@@ -19,7 +19,7 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
           query: CHARACTERS,
         });
 
-        const newCharacters = ch?.results?.map((c: Character) => ({ ...c, favorite: false }));
+        const newCharacters = ch?.results?.map((c: Character) => ({ ...c, favorite: false, comments: [] }));
 
         setCharacters(newCharacters);
         setDB(newCharacters);
@@ -42,6 +42,19 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
         return characters.find(c => c.id === id);
     };
 
+    const addComment = (comment: string, id: string) => {
+        setCharacters(prevCharacters =>
+            prevCharacters.map((ch: Character) =>
+                ch.id === id ? { ...ch, comments: [...ch?.comments, comment] } : ch
+            )
+        );
+        setDB(prevDB =>
+            prevDB.map((ch: Character) =>
+                ch.id === id ? { ...ch, comments: [...ch?.comments, comment] } : ch
+            )
+        );
+    };
+
     useEffect(() => {
         getCharacters();
     }, []);
@@ -55,6 +68,7 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
                 setCharacters,
                 findById,
                 addFavorite,
+                addComment,
             }}
         >
             { children }
