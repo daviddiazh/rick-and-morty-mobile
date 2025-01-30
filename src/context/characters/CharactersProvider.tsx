@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { CharacterContext } from './CharactersContext';
 import { apolloClient } from '../../graphql/client';
@@ -5,7 +6,7 @@ import { CHARACTERS } from '../../graphql/queries';
 import { Character } from '../../interfaces/character';
 
 export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
-    const [characters, setCharacters] = useState<{results: Character[]} | any>(
+    const [characters, setCharacters] = useState<Character[]>(
         [],
     );
 
@@ -33,6 +34,10 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
         );
     };
 
+    const findById = (id: string) => {
+        return characters.find(c => c.id === id);
+    };
+
     const filterCharacters = () => {};
     const filterSpecies = () => {};
 
@@ -41,7 +46,16 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
     }, []);
 
     return (
-        <CharacterContext.Provider value={{characters, addFavorite, filterCharacters, filterSpecies}}>
+        <CharacterContext.Provider
+            value={{
+                characters,
+
+                findById,
+                addFavorite,
+                filterCharacters,
+                filterSpecies,
+            }}
+        >
             { children }
         </CharacterContext.Provider>
     );

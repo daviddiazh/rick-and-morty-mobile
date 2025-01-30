@@ -1,9 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useRef, useState} from 'react';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
-  Image,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,20 +9,22 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
-import {scale} from 'react-native-size-matters';
 import {styles} from './styles';
 import {Character} from '../../interfaces/character';
 import {Icon} from '../../components/Icon';
 import {useForm} from '../../hooks/useForm';
 import {BottomSheet} from '../../components/BottomSheet/';
 import { useCharacters } from '../../context/characters/CharactersProvider';
+import { CharacterCard } from '../../components/Character';
 
 export const CharactersScreen = () => {
   const [charactersFilter, setCharactersFilter] = useState<number>(0);
   const [specieFilter, setSpecieFilter] = useState<number>(0);
-  const navigator: NavigationProp<any, any> = useNavigation();
 
-  const { characters, addFavorite } = useCharacters();
+  const { characters } = useCharacters();
+  const [starredCharacters, setStarredCharacters] = useState<Character[]>(
+    [],
+  );
 
   const bottomSheetRef = useRef<any>(null);
 
@@ -34,9 +34,9 @@ export const CharactersScreen = () => {
     input: '',
   });
 
-  const navigate = (character: Character) => {
-    navigator.navigate('DetailScreen', {character});
-  };
+  useEffect(() => {
+    setStarredCharacters(characters.filter(c => c.favorite));
+  }, [characters]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,43 +61,21 @@ export const CharactersScreen = () => {
           </TouchableOpacity>
         </View>
 
+        <Text style={styles.subtitle}>STARRED CHARACTERS: {starredCharacters?.length}</Text>
+        {
+          starredCharacters
+            ?.filter((c: Character) => c?.name.includes(input))
+            ?.map((c: Character) => (
+              <CharacterCard ch={c} />
+            ))
+        }
+
         <Text style={styles.subtitle}>CHARACTERS: {characters?.length}</Text>
         {characters?.length > 0 ? (
           characters
             ?.filter((c: Character) => c?.name.includes(input))
             ?.map((c: Character) => (
-              <View key={c?.id} style={styles.card}>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    gap: scale(15),
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => navigate(c)}
-                    activeOpacity={0.7}>
-                    <Image
-                      source={{uri: c?.image}}
-                      width={50}
-                      height={50}
-                      style={styles.picture}
-                    />
-                  </TouchableOpacity>
-                  <View style={styles.info}>
-                    <Text onPress={() => navigate(c)}>{c?.name}</Text>
-                    <Text>{c?.species}</Text>
-                  </View>
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => addFavorite(c?.id)}
-                  >
-                  <Icon
-                    name="corazon"
-                    color={c?.favorite ? '#53C629' : '#D1D5DB'}
-                  />
-                </TouchableOpacity>
-              </View>
+              <CharacterCard ch={c} />
             ))
         ) : (
           <ActivityIndicator size="small" color="#8054C7" />

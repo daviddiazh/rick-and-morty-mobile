@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from '../../components/Icon';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { Character } from '../../interfaces/character';
 import { styles } from './styles';
+import { useCharacters } from '../../context/characters/CharactersProvider';
+import { Character } from '../../interfaces/character';
 
-export const DetailScreen = ({ route }: { route?: { params: { character: Character } } }) => {
-  const { character } = route?.params || {};
+export const DetailScreen = ({ route }: { route?: { params: { id: string } } }) => {
+  const { id } = route?.params || {};
 
+  const { addFavorite, findById } = useCharacters();
+  const [character, setCharacter] = useState<Character | null>(null);
   const navigator: NavigationProp<any, any> = useNavigation();
 
   const navigate = () => {
     navigator.navigate('CharactersScreen');
   };
+
+  useEffect(() => {
+    const resp = findById(id || '');
+    setCharacter(resp);
+  }, [id, findById]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,13 +36,17 @@ export const DetailScreen = ({ route }: { route?: { params: { character: Charact
           height={100}
           style={styles.picture}
         />
-        <View style={styles.favoriteIcon}>
+        <TouchableOpacity
+          style={styles.favoriteIcon}
+          onPress={() => addFavorite(character?.id || '')}
+          activeOpacity={0.7}
+        >
           <Icon
             name="corazon"
             size={17}
             color={character?.favorite ? '#53C629' : '#D1D5DB'}
           />
-        </View>
+        </TouchableOpacity>
       </View>
       <Text style={styles.name}>{character?.name}</Text>
 
