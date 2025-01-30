@@ -16,6 +16,7 @@ import {useForm} from '../../hooks/useForm';
 import {BottomSheet} from '../../components/BottomSheet/';
 import { useCharacters } from '../../context/characters/CharactersProvider';
 import { CharacterCard } from '../../components/Character';
+import { scale } from 'react-native-size-matters';
 
 export const CharactersScreen = () => {
   const [charactersFilter, setCharactersFilter] = useState<number>(0);
@@ -61,14 +62,16 @@ export const CharactersScreen = () => {
           </TouchableOpacity>
         </View>
 
+        <View style={{ marginBottom: scale(10) }}>
         <Text style={styles.subtitle}>STARRED CHARACTERS: {starredCharacters?.length}</Text>
-        {
-          starredCharacters
-            ?.filter((c: Character) => c?.name.includes(input))
-            ?.map((c: Character) => (
-              <CharacterCard ch={c} />
-            ))
-        }
+          {
+            starredCharacters
+              ?.filter((c: Character) => c?.name.includes(input))
+              ?.map((c: Character) => (
+                <CharacterCard ch={c} />
+              ))
+          }
+        </View>
 
         <Text style={styles.subtitle}>CHARACTERS: {characters?.length}</Text>
         {characters?.length > 0 ? (
