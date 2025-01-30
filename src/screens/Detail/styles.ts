@@ -13,14 +13,14 @@ export const styles = StyleSheet.create({
         marginTop: scale(15),
     },
     picture: {
-        borderRadius: 50,
+        borderRadius: 100,
         width: scale(100),
         height: scale(100),
     },
     favoriteIcon: {
         position: 'absolute',
         bottom: 0,
-        right: -5,
+        right: -1,
         backgroundColor: '#fff',
         borderRadius: 20,
         padding: 7,
