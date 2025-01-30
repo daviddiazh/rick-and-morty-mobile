@@ -6,17 +6,30 @@ export const styles = StyleSheet.create({
         paddingHorizontal: scale(20),
         paddingTop: scale(20),
     },
+    pictureContainer: {
+        position: 'relative', // Asegura que los hijos absolutos se posicionen dentro de este contenedor
+        width: scale(100),
+        height: scale(100),
+        marginTop: scale(15),
+    },
     picture: {
         borderRadius: 50,
-        width: 100,
-        height: 100,
-        marginTop: scale(25),
+        width: scale(100),
+        height: scale(100),
+    },
+    favoriteIcon: {
+        position: 'absolute',
+        bottom: 0,
+        right: -5,
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        padding: 7,
     },
     name: {
         fontSize: scale(20),
         fontWeight: '700',
         paddingTop: scale(15),
-        paddingBottom: scale(20),
+        paddingBottom: scale(10),
     },
     info: {
         paddingVertical: scale(15),

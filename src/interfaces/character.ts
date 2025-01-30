@@ -5,4 +5,5 @@ export interface Character {
     species: string;
     status: string;
     occupation: string;
+    favorite?: boolean;
 }

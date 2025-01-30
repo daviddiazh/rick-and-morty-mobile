@@ -18,6 +18,7 @@ import { StackNavigator } from './src/navigation/StackNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApolloProvider } from '@apollo/client';
 import { apolloClient } from './src/graphql/client';
+import { CharactersProvider } from './src/context/characters/CharactersProvider';
 
 function App(): React.JSX.Element {
 
@@ -25,6 +26,7 @@ function App(): React.JSX.Element {
 
   return (
     <ApolloProvider client={ apolloClient }>
+      <CharactersProvider>
         <NavigationContainer>
           <SafeAreaView />
           <SafeAreaView style={{ flex: 1, backgroundColor: '#fff'}}>
@@ -32,6 +34,7 @@ function App(): React.JSX.Element {
             <StatusBar backgroundColor="#fff" />
           </SafeAreaView>
         </NavigationContainer>
+      </CharactersProvider>
     </ApolloProvider>
   );
 }

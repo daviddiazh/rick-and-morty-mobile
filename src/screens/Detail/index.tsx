@@ -21,12 +21,21 @@ export const DetailScreen = ({ route }: { route?: { params: { character: Charact
         <Icon name="flecha-derecha" color="#8054C7" />
       </TouchableOpacity>
 
-      <Image
-        source={{ uri: character?.image}}
-        width={100}
-        height={100}
-        style={styles.picture}
-      />
+      <View style={styles.pictureContainer}>
+        <Image
+          source={{ uri: character?.image}}
+          width={100}
+          height={100}
+          style={styles.picture}
+        />
+        <View style={styles.favoriteIcon}>
+          <Icon
+            name="corazon"
+            size={17}
+            color={character?.favorite ? '#53C629' : '#D1D5DB'}
+          />
+        </View>
+      </View>
       <Text style={styles.name}>{character?.name}</Text>
 
       <View style={styles.info}>
