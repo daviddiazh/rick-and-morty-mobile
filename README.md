@@ -2,8 +2,8 @@
 
 ### Video
 
-- <a href="https://youtube.com/shorts/Y6tBiRqt7OA?feature=share">Ver en YouTube</a>
-- <a href="https://drive.google.com/drive/folders/1eL6qYESN6-5ZZEzl0XjIXl7U-Eo_R83W?usp=sharing">Ver en Drive</a>
+- <a href="https://youtube.com/shorts/Y6tBiRqt7OA?feature=share" target="_blank">Ver en YouTube</a>
+- <a href="https://drive.google.com/drive/folders/1eL6qYESN6-5ZZEzl0XjIXl7U-Eo_R83W?usp=sharing" target="_blank">Ver en Drive</a>
 
 ## Step by step to run the App
 
