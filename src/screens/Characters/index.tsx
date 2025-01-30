@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { scale } from 'react-native-size-matters';
@@ -20,8 +20,8 @@ export const CharactersScreen = () => {
     input: '',
   });
 
-  const navigate = () => {
-    navigator.navigate('DetailScreen');
+  const navigate = (character: Character) => {
+    navigator.navigate('DetailScreen', { character });
   };
 
   const getCharacters = async () => {
@@ -47,17 +47,19 @@ export const CharactersScreen = () => {
               value={input}
               onChangeText={ (value) => onChange(value, 'input') }
               placeholder="Search or filter results"
-              style={{width: '85%'}} />
+              style={{width: '85%'}}
+              placeholderTextColor="#6B7280"
+            />
           </View>
           <Icon name="sliders-02" size={17} color="#8054C7" />
         </View>
 
-        <Text style={styles.subtitle}>CHARACTERS: ({characters?.results?.length})</Text>
+        <Text style={styles.subtitle}>CHARACTERS: {characters?.results?.length}</Text>
         {
-          characters?.results?.filter((c: Character) => c?.name.includes(input))?.map((c: Character) => (
+          characters?.results?.length > 0 ? characters?.results?.filter((c: Character) => c?.name.includes(input))?.map((c: Character) => (
             <View key={c?.id} style={styles.card}>
               <View style={{ alignItems: 'center', flexDirection: 'row', gap: scale(15) }}>
-                <TouchableOpacity onPress={navigate} activeOpacity={0.7}>
+                <TouchableOpacity onPress={() => navigate(c)} activeOpacity={0.7}>
                   <Image
                     source={{ uri: c?.image}}
                     width={50}
@@ -66,14 +68,14 @@ export const CharactersScreen = () => {
                   />
                 </TouchableOpacity>
                 <View style={styles.info}>
-                  <Text onPress={navigate}>{c?.name}</Text>
+                  <Text onPress={() => navigate(c)}>{c?.name}</Text>
                   <Text>{c?.species}</Text>
                 </View>
               </View>
 
               <Icon name="corazon" color="#D1D5DB" /> { /* Gray: #D1D5DB | Green: #53C629 */ }
             </View>
-          ))
+          )) : <ActivityIndicator size="small" color="#8054C7" />
         }
       </ScrollView>
 

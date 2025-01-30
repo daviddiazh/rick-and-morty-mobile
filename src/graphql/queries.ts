@@ -8,6 +8,7 @@ export const CHARACTERS = gql`
                 name,
                 image,
                 species,
+                status,
             }
         }
     }
