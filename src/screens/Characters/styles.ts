@@ -4,6 +4,8 @@ import { scale } from 'react-native-size-matters';
 export const styles = StyleSheet.create({
     container: {
         paddingHorizontal: scale(20),
+        flex: 1,
+        height: '100%',
     },
     title: {
         paddingVertical: scale(30),

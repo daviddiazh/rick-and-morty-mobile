@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,10 +11,13 @@ import { styles } from './styles';
 import { Character } from '../../interfaces/character';
 import { Icon } from '../../components/Icon';
 import { useForm } from '../../hooks/useForm';
+import { BottomSheet } from '../../components/BottomSheet/';
 
 export const CharactersScreen = () => {
   const [characters, setCharacters] = useState<{results: Character[]} | any>([]);
   const navigator: NavigationProp<any, any> = useNavigation();
+
+  const bottomSheetRef = useRef<any>(null);
 
   const { input, onChange } = useForm({
     input: '',
@@ -51,7 +54,9 @@ export const CharactersScreen = () => {
               placeholderTextColor="#6B7280"
             />
           </View>
-          <Icon name="sliders-02" size={17} color="#8054C7" />
+          <TouchableOpacity activeOpacity={0.7} onPress={() => bottomSheetRef.current?.expand()}>
+            <Icon name="sliders-02" size={17} color="#8054C7" />
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.subtitle}>CHARACTERS: {characters?.results?.length}</Text>
@@ -79,7 +84,14 @@ export const CharactersScreen = () => {
         }
       </ScrollView>
 
-      {/* <BottomSheetComponent /> */}
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapTo={'83%'}
+        backgroundColor={'white'}
+        backDropColor={'black'}
+      >
+        <Text>Hola</Text>
+      </BottomSheet>
     </SafeAreaView>
   );
 };
