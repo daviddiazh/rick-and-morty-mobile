@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { CharacterContext } from './CharactersContext';
@@ -9,6 +10,7 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
     const [characters, setCharacters] = useState<Character[]>(
         [],
     );
+    const [DB, setDB] = useState<Character[]>([]);
 
     const getCharacters = async () => {
         const {
@@ -16,30 +18,29 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
         } = await apolloClient.query({
           query: CHARACTERS,
         });
-        setCharacters(
-           ch?.results?.map((c: Character) => ({...c, favorite: false})),
-        );
+
+        const newCharacters = ch?.results?.map((c: Character) => ({ ...c, favorite: false }));
+
+        setCharacters(newCharacters);
+        setDB(newCharacters);
     };
 
     const addFavorite = (id: string) => {
-        setCharacters(
-            characters?.map((ch: Character) =>
-                ch.id === id
-                    ? {
-                        ...ch,
-                        favorite: ch.favorite ? false : true,
-                    }
-                    : ch,
-            ),
+        setCharacters(prevCharacters =>
+            prevCharacters.map((ch: Character) =>
+                ch.id === id ? { ...ch, favorite: !ch.favorite } : ch
+            )
+        );
+        setDB(prevDB =>
+            prevDB.map((ch: Character) =>
+                ch.id === id ? { ...ch, favorite: !ch.favorite } : ch
+            )
         );
     };
 
     const findById = (id: string) => {
         return characters.find(c => c.id === id);
     };
-
-    const filterCharacters = () => {};
-    const filterSpecies = () => {};
 
     useEffect(() => {
         getCharacters();
@@ -49,11 +50,11 @@ export const CharactersProvider: FC<{children: ReactNode}> = ({ children }) => {
         <CharacterContext.Provider
             value={{
                 characters,
+                DB,
 
+                setCharacters,
                 findById,
                 addFavorite,
-                filterCharacters,
-                filterSpecies,
             }}
         >
             { children }

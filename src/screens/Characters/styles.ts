@@ -12,6 +12,11 @@ export const styles = StyleSheet.create({
         fontSize: scale(19),
         fontWeight: '700',
     },
+    btnFilter: {
+        fontSize: scale(13),
+        fontWeight: '500',
+        color: '#8054C7',
+    },
     input: {
         flexDirection: 'row',
         gap: scale(10),

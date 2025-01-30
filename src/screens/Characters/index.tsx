@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef, useState} from 'react';
 import {
@@ -21,28 +22,88 @@ import { scale } from 'react-native-size-matters';
 export const CharactersScreen = () => {
   const [charactersFilter, setCharactersFilter] = useState<number>(0);
   const [specieFilter, setSpecieFilter] = useState<number>(0);
-
-  const { characters } = useCharacters();
+  const [filter, setFilter] = useState<boolean>(false);
   const [starredCharacters, setStarredCharacters] = useState<Character[]>(
     [],
   );
+  const [sort, setSort] = useState<number>(0);
+
+  const { characters, setCharacters, DB } = useCharacters();
 
   const bottomSheetRef = useRef<any>(null);
 
-  const filterDisabled = charactersFilter === 0 && specieFilter === 0;
+  const filterDisabled = (charactersFilter === 0 && specieFilter === 0) && !filter;
 
   const {input, onChange} = useForm({
     input: '',
   });
 
+  const filterCharacters = () => {
+    if (charactersFilter === 2) {
+      setCharacters(characters.sort((a, b) =>
+        sort === 0 ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+      ));
+      setStarredCharacters(starredCharacters.sort((a, b) =>
+        sort === 0 ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+      ));
+      setSort(prevSort => (prevSort === 0 ? 1 : 0));
+    }
+  };
+
+  const filterSpecies = () => {
+    setCharacters(
+      specieFilter === 1
+        ? DB?.filter(c => c.species === 'Human') || []
+        : specieFilter === 2
+        ? DB?.filter(c => c.species === 'Alien') || []
+        : DB
+    );
+
+    setStarredCharacters(prev =>
+      specieFilter === 0
+        ? prev.filter(c => c.favorite)
+        : prev.filter(c => c.species === (specieFilter === 1 ? 'Human' : 'Alien'))
+    );
+  };
+
+  const handleFilters = () => {
+    setFilter(true);
+    bottomSheetRef.current.close();
+
+    filterCharacters();
+    filterSpecies();
+  };
+
   useEffect(() => {
-    setStarredCharacters(characters.filter(c => c.favorite));
+    setStarredCharacters([...characters.filter(c => c.favorite)]);
   }, [characters]);
+
+  useEffect(() => {
+    if (specieFilter === 0) {
+      filterSpecies();
+    }
+  }, [specieFilter]);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Rick and Morty list</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text style={styles.title}>Rick and Morty list</Text>
+          {
+            filter && (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setFilter(false);
+                  setCharactersFilter(0);
+                  setSpecieFilter(0);
+                }}
+              >
+                <Text style={styles.btnFilter}>Done</Text>
+              </TouchableOpacity>
+            )
+          }
+        </View>
 
         <View style={styles.textInput}>
           <View style={styles.input}>
@@ -63,31 +124,49 @@ export const CharactersScreen = () => {
         </View>
 
         <View style={{ marginBottom: scale(10) }}>
-        <Text style={styles.subtitle}>STARRED CHARACTERS: {starredCharacters?.length}</Text>
           {
-            starredCharacters
-              ?.filter((c: Character) => c?.name.includes(input))
-              ?.map((c: Character) => (
-                <CharacterCard ch={c} />
-              ))
+            filter && charactersFilter === 1 && (
+              <>
+                <Text style={styles.subtitle}>STARRED CHARACTERS: {starredCharacters?.length}</Text>
+                {
+                  starredCharacters
+                    ?.filter((c: Character) => c?.name.includes(input))
+                    ?.map((c: Character) => (
+                      <View key={c.id + 'starred'}>
+                        <CharacterCard ch={c} />
+                      </View>
+                    ))
+                }
+              </>
+            )
           }
         </View>
 
-        <Text style={styles.subtitle}>CHARACTERS: {characters?.length}</Text>
-        {characters?.length > 0 ? (
-          characters
-            ?.filter((c: Character) => c?.name.includes(input))
-            ?.map((c: Character) => (
-              <CharacterCard ch={c} />
-            ))
-        ) : (
-          <ActivityIndicator size="small" color="#8054C7" />
-        )}
+        <>
+          {
+            charactersFilter !== 1 && (
+              <>
+                <Text style={styles.subtitle}>CHARACTERS: {characters?.length}</Text>
+                {characters?.length > 0 ? (
+                  characters
+                    ?.filter((c: Character) => c?.name.includes(input))
+                    ?.map((c: Character) => (
+                      <View key={c.id + 'character'}>
+                        <CharacterCard ch={c} />
+                      </View>
+                    ))
+                ) : (
+                  <ActivityIndicator size="small" color="#8054C7" />
+                )}
+              </>
+            )
+          }
+        </>
       </ScrollView>
 
       <BottomSheet
         ref={bottomSheetRef}
-        snapTo={'85%'}
+        snapTo={'80%'}
         backgroundColor={'white'}
         backDropColor={'black'}>
         <View style={{flex: 1}}>
@@ -191,7 +270,9 @@ export const CharactersScreen = () => {
           style={
             filterDisabled ? styles.btnFilterInactive : styles.btnFilterActive
           }
-          disabled={filterDisabled}>
+          disabled={filterDisabled}
+          onPress={handleFilters}
+        >
           <Text
             style={
               filterDisabled
