@@ -142,26 +142,19 @@ export const CharactersScreen = () => {
           }
         </View>
 
-        <>
-          {
-            charactersFilter !== 1 && (
-              <>
-                <Text style={styles.subtitle}>CHARACTERS: {characters?.length}</Text>
-                {characters?.length > 0 ? (
-                  characters
-                    ?.filter((c: Character) => c?.name.includes(input))
-                    ?.map((c: Character) => (
-                      <View key={c.id + 'character'}>
-                        <CharacterCard ch={c} />
-                      </View>
-                    ))
-                ) : (
-                  <ActivityIndicator size="small" color="#8054C7" />
-                )}
-              </>
-            )
-          }
-        </>
+
+        <Text style={styles.subtitle}>CHARACTERS: {characters?.length}</Text>
+        {characters?.length > 0 ? (
+          characters
+            ?.filter((c: Character) => c?.name.includes(input))
+            ?.map((c: Character) => (
+              <View key={c.id + 'character'}>
+                <CharacterCard ch={c} />
+              </View>
+            ))
+        ) : (
+          <ActivityIndicator size="small" color="#8054C7" />
+        )}
       </ScrollView>
 
       <BottomSheet
