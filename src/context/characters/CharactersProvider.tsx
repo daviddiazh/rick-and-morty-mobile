@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { CharacterContext } from './CharactersContext';
